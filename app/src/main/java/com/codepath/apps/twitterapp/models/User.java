@@ -50,7 +50,7 @@ public class User {
         try {
             u.name = json.getString("name");
             u.uid = json.getLong("id");
-            u.screenName = json.getString("screen_name");
+            u.screenName = "@" + json.getString("screen_name");
             u.profileImageUrl = json.getString("profile_image_url");
         } catch (JSONException e) {
             e.printStackTrace();

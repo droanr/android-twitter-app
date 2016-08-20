@@ -72,7 +72,6 @@ public class Tweet {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        // tweet.user
         return tweet;
 
     }

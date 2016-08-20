@@ -4,8 +4,10 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 
 import com.codepath.apps.twitterapp.R;
 import com.codepath.apps.twitterapp.TwitterApplication;
@@ -35,12 +37,21 @@ public class TimelineActivity extends AppCompatActivity {
 
     TweetsAdapter adapter;
 
+    private static final long DEFAULT_MAX = -1;
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        return super.onPrepareOptionsMenu(menu);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timeline);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         setupViews();
-        populateTimeline();
+        populateTimeline(DEFAULT_MAX);
     }
 
     public void setupViews() {
@@ -54,19 +65,22 @@ public class TimelineActivity extends AppCompatActivity {
         rvTweets.addOnScrollListener(new EndlessRecyclerViewScrollListener((LinearLayoutManager) rvTweets.getLayoutManager()) {
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
-                // TODO add infinte scroll here
+                long maxId = DEFAULT_MAX;
+                if (tweets.size() > 0) {
+                    maxId = tweets.get(tweets.size() - 1).getUid();
+                }
+                populateTimeline(maxId);
             }
         });
     }
 
     // Send an API request to get the timeline json
     // fill the RecyclerView by creating the tweet objects from the json
-    public void populateTimeline() {
-        client.getHomeTimeline(new JsonHttpResponseHandler() {
+    public void populateTimeline(long maxId) {
+        client.getHomeTimeline(maxId, new JsonHttpResponseHandler() {
             // Success
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                Log.d("DEBUG", response.toString());
                 // Deserialize + create models.
                 // Add them to the adapter
                 tweets.addAll(Tweet.fromJSONArray(response));
@@ -88,5 +102,8 @@ public class TimelineActivity extends AppCompatActivity {
     {
         getMenuInflater().inflate(R.menu.menu_timeline, menu);
         return true;
+    }
+
+    public void onActionTweet(MenuItem item) {
     }
 }
