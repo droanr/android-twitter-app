@@ -27,8 +27,8 @@
         android:layout_alignParentEnd="true" />
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
         android:id="@+id/ivUserImage"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
@@ -56,22 +56,24 @@
         android:layout_alignLeft="@+id/tvUserName"
         android:layout_alignStart="@+id/tvUserName" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
     <ImageView
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:id="@+id/ivClose"
-        android:background="@drawable/close"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:background="@drawable/close" />
+
+    </LinearLayout>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Small Text"
         android:id="@+id/tvCharCount"
-        android:layout_alignParentBottom="true"
-        android:layout_toLeftOf="@+id/btnTweet"
-        android:layout_toStartOf="@+id/btnTweet" />
+        android:layout_alignBaseline="@+id/btnTweet"
+        android:layout_alignBottom="@+id/btnTweet"
+        android:layout_toLeftOf="@+id/ivUserImage"
+        android:layout_toStartOf="@+id/ivUserImage" />
 </RelativeLayout>

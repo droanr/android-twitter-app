@@ -13,7 +13,11 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.codepath.apps.twitterapp.R;
+import com.codepath.apps.twitterapp.models.User;
+
+import org.parceler.Parcels;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -56,10 +60,10 @@ public class CreateTweetFragment extends DialogFragment {
         void onCreateNewTweet(String tweet);
     }
 
-    public static CreateTweetFragment newInstance() {
+    public static CreateTweetFragment newInstance(User user) {
         CreateTweetFragment fragment = new CreateTweetFragment();
         Bundle args = new Bundle();
-        //args.putParcelable("user", Parcels.wrap(user));
+        args.putParcelable("user", Parcels.wrap(user));
         fragment.setArguments(args);
         return fragment;
     }
@@ -80,6 +84,10 @@ public class CreateTweetFragment extends DialogFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         setUpViews();
+        User user = (User) Parcels.unwrap(getArguments().getParcelable("user"));
+        tvUserName.setText(user.getName());
+        tvUserHandle.setText(user.getScreenName());
+        Glide.with(this).load(user.getProfileImageUrl()).into(ivUserImage);
     }
 
     private void setUpViews() {

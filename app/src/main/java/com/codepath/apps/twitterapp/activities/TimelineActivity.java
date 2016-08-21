@@ -16,6 +16,7 @@ import com.codepath.apps.twitterapp.TwitterApplication;
 import com.codepath.apps.twitterapp.adapters.TweetsAdapter;
 import com.codepath.apps.twitterapp.fragments.CreateTweetFragment;
 import com.codepath.apps.twitterapp.models.Tweet;
+import com.codepath.apps.twitterapp.models.User;
 import com.codepath.apps.twitterapp.utils.EndlessRecyclerViewScrollListener;
 import com.codepath.apps.twitterapp.utils.TwitterClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -43,6 +44,8 @@ public class TimelineActivity extends AppCompatActivity implements CreateTweetFr
 
     TweetsAdapter adapter;
 
+    User authenticatedUser;
+
     private static final long DEFAULT_MAX = -1;
 
     @Override
@@ -57,7 +60,23 @@ public class TimelineActivity extends AppCompatActivity implements CreateTweetFr
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setupViews();
+        setCurrentUser();
         populateTimeline(DEFAULT_MAX);
+    }
+
+    public void setCurrentUser() {
+        client.getAuthenticatedUser(new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                Log.d("DEBUG", response.toString());
+                authenticatedUser = User.fromJSON(response);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                Log.d("DEBUG", errorResponse.toString());
+            }
+        });
     }
 
     public void setupViews() {
@@ -119,7 +138,7 @@ public class TimelineActivity extends AppCompatActivity implements CreateTweetFr
 
     public void onActionTweet(MenuItem item) {
         FragmentManager fm = getSupportFragmentManager();
-        CreateTweetFragment fragment = CreateTweetFragment.newInstance();
+        CreateTweetFragment fragment = CreateTweetFragment.newInstance(authenticatedUser);
         fragment.show(fm, "create_tweet_fragment");
     }
 
