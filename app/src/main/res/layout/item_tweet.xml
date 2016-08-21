@@ -31,6 +31,7 @@
         android:id="@+id/tvTweet"
         android:lines="3"
         android:ellipsize="end"
+        android:autoLink="all"
         android:layout_alignBottom="@+id/ivUserImage"
         android:layout_toRightOf="@+id/ivUserImage"
         android:layout_toEndOf="@+id/ivUserImage"

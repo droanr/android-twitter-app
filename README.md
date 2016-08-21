@@ -12,7 +12,7 @@ The following user stories must be completed:
 
 The following advanced user stories are optional:
 - [x] While composing a tweet, user can see a character counter with characters remaining for tweet out of 140 (1 point)
-- [ ] Links in tweets are clickable and will launch the web browser (see autolink) (1 point)
+- [x] Links in tweets are clickable and will launch the web browser (see autolink) (1 point)
 - [x] User can refresh tweets timeline by pulling down to refresh (i.e pull-to-refresh) (1 point)
 - [ ] User can open the twitter app offline and see last loaded tweets
     - Tweets are persisted into sqlite and can be displayed from the local DB (2 points)
