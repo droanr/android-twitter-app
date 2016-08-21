@@ -2,6 +2,7 @@ package com.codepath.apps.twitterapp.activities;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -36,6 +37,9 @@ public class TimelineActivity extends AppCompatActivity implements CreateTweetFr
 
     @BindView(R.id.rvTweets)
     RecyclerView rvTweets;
+
+    @BindView(R.id.swipeContainer)
+    SwipeRefreshLayout swipeContainer;
 
     TweetsAdapter adapter;
 
@@ -72,6 +76,13 @@ public class TimelineActivity extends AppCompatActivity implements CreateTweetFr
                     maxId = tweets.get(tweets.size() - 1).getUid();
                 }
                 populateTimeline(maxId);
+            }
+        });
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                populateTimeline(DEFAULT_MAX);
+                swipeContainer.setRefreshing(false);
             }
         });
     }
