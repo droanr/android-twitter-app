@@ -3,11 +3,15 @@ package com.codepath.apps.twitterapp.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.codepath.apps.twitterapp.R;
 
@@ -27,6 +31,23 @@ public class CreateTweetFragment extends DialogFragment {
 
     Unbinder unbinder;
 
+    @BindView(R.id.ivClose)
+    ImageView ivClose;
+
+    @BindView(R.id.ivUserImage)
+    ImageView ivUserImage;
+
+    @BindView(R.id.tvUserName)
+    TextView tvUserName;
+
+    @BindView(R.id.tvUserHandle)
+    TextView tvUserHandle;
+
+    @BindView(R.id.tvCharCount)
+    TextView tvCharCount;
+
+    TextWatcher textEditorWatcher;
+
     public CreateTweetFragment() {
 
     }
@@ -38,6 +59,7 @@ public class CreateTweetFragment extends DialogFragment {
     public static CreateTweetFragment newInstance() {
         CreateTweetFragment fragment = new CreateTweetFragment();
         Bundle args = new Bundle();
+        //args.putParcelable("user", Parcels.wrap(user));
         fragment.setArguments(args);
         return fragment;
     }
@@ -52,7 +74,7 @@ public class CreateTweetFragment extends DialogFragment {
     @Override
     public void onResume() {
         super.onResume();
-        getDialog().getWindow().setLayout(500, 700);
+        //getDialog().getWindow().setLayout(500, 700);
     }
 
     @Override
@@ -61,6 +83,19 @@ public class CreateTweetFragment extends DialogFragment {
     }
 
     private void setUpViews() {
+        textEditorWatcher = new TextWatcher() {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                //This sets a textview to the current length
+                tvCharCount.setText(String.valueOf(s.length()));
+            }
+
+            public void afterTextChanged(Editable s) {
+            }
+        };
+        etTweet.addTextChangedListener(textEditorWatcher);
         btnTweet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

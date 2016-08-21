@@ -19,10 +19,9 @@
         android:text="Small Text"
         android:id="@+id/tvUserHandle"
         android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/tvTweet"
-        android:layout_toEndOf="@+id/tvTweet"
-        android:layout_marginLeft="36dp"
-        android:layout_marginStart="36dp" />
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@+id/tvUserName"
+        android:layout_toEndOf="@+id/tvUserName" />
 
     <TextView
         android:layout_width="wrap_content"
