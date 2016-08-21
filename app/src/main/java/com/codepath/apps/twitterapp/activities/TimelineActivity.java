@@ -1,6 +1,7 @@
 package com.codepath.apps.twitterapp.activities;
 
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,6 +13,7 @@ import android.view.MenuItem;
 import com.codepath.apps.twitterapp.R;
 import com.codepath.apps.twitterapp.TwitterApplication;
 import com.codepath.apps.twitterapp.adapters.TweetsAdapter;
+import com.codepath.apps.twitterapp.fragments.CreateTweetFragment;
 import com.codepath.apps.twitterapp.models.Tweet;
 import com.codepath.apps.twitterapp.utils.EndlessRecyclerViewScrollListener;
 import com.codepath.apps.twitterapp.utils.TwitterClient;
@@ -27,7 +29,7 @@ import butterknife.ButterKnife;
 import cz.msebera.android.httpclient.Header;
 import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
 
-public class TimelineActivity extends AppCompatActivity {
+public class TimelineActivity extends AppCompatActivity implements CreateTweetFragment.CreateTweetFragmentListener {
 
     TwitterClient client;
     ArrayList<Tweet> tweets;
@@ -105,5 +107,25 @@ public class TimelineActivity extends AppCompatActivity {
     }
 
     public void onActionTweet(MenuItem item) {
+        FragmentManager fm = getSupportFragmentManager();
+        CreateTweetFragment fragment = CreateTweetFragment.newInstance();
+        fragment.show(fm, "create_tweet_fragment");
+    }
+
+    @Override
+    public void onCreateNewTweet(String tweet) {
+        client.postNewTweet(tweet, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                Log.d("DEBUG", response.toString());
+                tweets.add(0, Tweet.fromJSON(response));
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                Log.d("DEBUG", errorResponse.toString());
+            }
+        });
     }
 }
