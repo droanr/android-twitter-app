@@ -50,6 +50,12 @@ public class CreateTweetFragment extends DialogFragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        getDialog().getWindow().setLayout(500, 700);
+    }
+
+    @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         setUpViews();
     }
