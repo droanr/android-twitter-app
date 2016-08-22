@@ -1,4 +1,4 @@
-Hours Spent in total: 14hrs
+Hours Spent in total: 13 hours in total
 
 The following user stories must be completed:
 
