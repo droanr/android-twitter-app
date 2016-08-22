@@ -16,10 +16,10 @@ The following advanced user stories are optional:
 - [x] User can refresh tweets timeline by pulling down to refresh (i.e pull-to-refresh) (1 point)
 - [ ] User can open the twitter app offline and see last loaded tweets
     - Tweets are persisted into sqlite and can be displayed from the local DB (2 points)
-- [ ] User can tap a tweet to display a "detailed" view of that tweet (2 points)
+- [x] User can tap a tweet to display a "detailed" view of that tweet (2 points)
 - [ ] User can select "reply" from detail view to respond to a tweet (1 point)
 - [ ] Improve the user interface and theme the app to feel "twitter branded" (1 to 5 points)
-- [ ] Stretch: User can see embedded image media within the tweet detail view (1 point)
+- [x] Stretch: User can see embedded image media within the tweet detail view (1 point)
 - [ ] Stretch: User can watch embedded video within the tweet (1 point)
 - [x] Stretch: Compose activity is replaced with a modal overlay (2 points)
 - [x] Stretch: Use Parcelable instead of Serializable using the popular Parceler library. (1 point)

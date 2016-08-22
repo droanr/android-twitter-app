@@ -1,6 +1,7 @@
 package com.codepath.apps.twitterapp.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
@@ -11,7 +12,10 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.codepath.apps.twitterapp.R;
+import com.codepath.apps.twitterapp.activities.TweetDetailActivity;
 import com.codepath.apps.twitterapp.models.Tweet;
+
+import org.parceler.Parcels;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -85,11 +89,16 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         public ViewHolder (View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
-            // TODO Launch Tweet detail Fragment/Activity
+            Intent i = new Intent(getContext(), TweetDetailActivity.class);
+            int position = getLayoutPosition();
+            Tweet tweet = mTweets.get(position);
+            i.putExtra("tweet", Parcels.wrap(tweet));
+            getContext().startActivity(i);
         }
     }
 
