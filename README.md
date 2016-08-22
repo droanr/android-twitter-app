@@ -30,3 +30,6 @@ The following advanced user stories are optional:
 - [ ] Stretch: Leverage the data binding support module to bind data into one or more activity or fragment layout templates. (1 point)
 - [x] Stretch: Replace Picasso with Glide for more efficient image rendering. (1 point)
 
+The following ADDITIONAL features are implemented:
+- [x] Add ability to retweet, and show retweet count in timeline view.
+

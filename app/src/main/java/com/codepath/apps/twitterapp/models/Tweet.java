@@ -70,6 +70,14 @@ public class Tweet {
 
     private String imageUrl;
 
+    private boolean retweeted;
+
+    private int retweetCount;
+
+    public int getRetweetCount() { return retweetCount; }
+
+    public boolean isRetweeted() { return retweeted; }
+
     public String getImageUrl() { return imageUrl;}
 
     // Deserialize the JSONObject
@@ -80,6 +88,8 @@ public class Tweet {
             tweet.uid = jsonObject.getLong("id");
             tweet.user = User.fromJSON(jsonObject.getJSONObject("user"));
             tweet.createdAt = jsonObject.getString("created_at");
+            tweet.retweeted = jsonObject.getBoolean("retweeted");
+            tweet.retweetCount = jsonObject.getInt("retweet_count");
             JSONObject entities = jsonObject.getJSONObject("entities");
             if (entities.has("media")) {
                 JSONArray mediaArray = entities.getJSONArray("media");
