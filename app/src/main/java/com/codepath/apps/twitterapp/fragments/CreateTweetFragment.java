@@ -111,11 +111,21 @@ public class CreateTweetFragment extends DialogFragment {
                 if (tweet.length() > 0) {
                     CreateTweetFragmentListener listener = (CreateTweetFragmentListener) getActivity();
                     listener.onCreateNewTweet(tweet);
-                    unbinder.unbind();
-                    dismiss();
+                    close();
                 }
             }
         });
+        ivClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                close();
+            }
+        });
+    }
+
+    public void close() {
+        unbinder.unbind();
+        dismiss();
     }
 
 }
