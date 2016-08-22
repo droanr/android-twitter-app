@@ -1,3 +1,5 @@
+Hours Spent in total: 14hrs
+
 The following user stories must be completed:
 
 - [x] User can sign in to Twitter using OAuth login (2 points)
@@ -33,3 +35,5 @@ The following advanced user stories are optional:
 The following ADDITIONAL features are implemented:
 - [x] Add ability to retweet, and show retweet count in timeline view.
 
+GIF:
+![alt tag](https://raw.githubusercontent.com/droanr/android-twitter-app/master/twitter-app-final.gif)
