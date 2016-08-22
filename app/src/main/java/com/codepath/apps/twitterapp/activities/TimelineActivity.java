@@ -44,6 +44,10 @@ public class TimelineActivity extends AppCompatActivity implements CreateTweetFr
 
     TweetsAdapter adapter;
 
+    public User getAuthenticatedUser() {
+        return authenticatedUser;
+    }
+
     User authenticatedUser;
 
     private static final long DEFAULT_MAX = -1;
@@ -59,12 +63,14 @@ public class TimelineActivity extends AppCompatActivity implements CreateTweetFr
         setContentView(R.layout.activity_timeline);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        setupViews();
         setCurrentUser();
+        setupViews();
         populateTimeline(DEFAULT_MAX);
     }
 
     public void setCurrentUser() {
+        ButterKnife.bind(this);
+        client = TwitterApplication.getRestClient(); // singleton client
         client.getAuthenticatedUser(new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
@@ -80,10 +86,8 @@ public class TimelineActivity extends AppCompatActivity implements CreateTweetFr
     }
 
     public void setupViews() {
-        ButterKnife.bind(this);
-        client = TwitterApplication.getRestClient(); // singleton client
         tweets = new ArrayList<>();
-        adapter = new TweetsAdapter(this, tweets);
+        adapter = new TweetsAdapter(this, tweets, getAuthenticatedUser());
         rvTweets.setAdapter(adapter);
         rvTweets.setItemAnimator(new SlideInUpAnimator());
         rvTweets.setLayoutManager(new LinearLayoutManager(this));
@@ -138,13 +142,30 @@ public class TimelineActivity extends AppCompatActivity implements CreateTweetFr
 
     public void onActionTweet(MenuItem item) {
         FragmentManager fm = getSupportFragmentManager();
-        CreateTweetFragment fragment = CreateTweetFragment.newInstance(authenticatedUser);
+        CreateTweetFragment fragment = CreateTweetFragment.newInstance(authenticatedUser, "", -1);
         fragment.show(fm, "create_tweet_fragment");
     }
 
     @Override
     public void onCreateNewTweet(String tweet) {
         client.postNewTweet(tweet, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                Log.d("DEBUG", response.toString());
+                tweets.add(0, Tweet.fromJSON(response));
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                Log.d("DEBUG", errorResponse.toString());
+            }
+        });
+    }
+
+    @Override
+    public void onReplyToTweet(String tweet, long inReplyTo) {
+        client.postReplyToTweet(inReplyTo, tweet, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 Log.d("DEBUG", response.toString());

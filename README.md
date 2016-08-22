@@ -17,7 +17,7 @@ The following advanced user stories are optional:
 - [ ] User can open the twitter app offline and see last loaded tweets
     - Tweets are persisted into sqlite and can be displayed from the local DB (2 points)
 - [x] User can tap a tweet to display a "detailed" view of that tweet (2 points)
-- [ ] User can select "reply" from detail view to respond to a tweet (1 point)
+- [x] User can select "reply" from detail view to respond to a tweet (1 point)
 - [ ] Improve the user interface and theme the app to feel "twitter branded" (1 to 5 points)
 - [x] Stretch: User can see embedded image media within the tweet detail view (1 point)
 - [ ] Stretch: User can watch embedded video within the tweet (1 point)

@@ -2,6 +2,8 @@ package com.codepath.apps.twitterapp.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
 import android.util.Log;
@@ -16,7 +18,9 @@ import com.bumptech.glide.Glide;
 import com.codepath.apps.twitterapp.R;
 import com.codepath.apps.twitterapp.TwitterApplication;
 import com.codepath.apps.twitterapp.activities.TweetDetailActivity;
+import com.codepath.apps.twitterapp.fragments.CreateTweetFragment;
 import com.codepath.apps.twitterapp.models.Tweet;
+import com.codepath.apps.twitterapp.models.User;
 import com.codepath.apps.twitterapp.utils.TwitterClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -45,9 +49,14 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
 
     private Context mContext;
 
-    public TweetsAdapter(Context context, ArrayList<Tweet> tweets) {
+    private User mAuthenticatedUser;
+
+    public User getmAuthenticatedUser() { return mAuthenticatedUser; }
+
+    public TweetsAdapter(Context context, ArrayList<Tweet> tweets, User authenticatedUser) {
         mContext = context;
         mTweets = tweets;
+        mAuthenticatedUser = authenticatedUser;
     }
 
     @Override
@@ -61,14 +70,15 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, final int position) {
-        Tweet tweet = mTweets.get(position);
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
+        final Tweet tweet = mTweets.get(position);
 
         holder.tvUserHandle.setText(tweet.getUser().getScreenName().toString());
         holder.tvUserName.setText(tweet.getUser().getName().toString());
         holder.tvTweet.setText(tweet.getBody().toString());
         holder.tvTime.setText(getRelativeTimeAgo(tweet.getCreatedAt()));
         holder.tvRetweetCount.setText(String.valueOf(tweet.getRetweetCount()));
+        holder.tvFavoritesCount.setText(String.valueOf(tweet.getFavoritesCount()));
 
         if (tweet.isRetweeted()) {
             holder.ivRetweet.setBackgroundResource(R.drawable.retweeted);
@@ -77,7 +87,6 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         holder.ivRetweet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Tweet tweet = mTweets.get(position);
                 TwitterClient client = TwitterApplication.getRestClient();
                 client.postRetweet(tweet.getUid(), new JsonHttpResponseHandler() {
                     @Override
@@ -100,6 +109,15 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
                         }
                     }
                 });
+            }
+        });
+
+        holder.ivReply.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentManager fm = ((AppCompatActivity)getContext()).getSupportFragmentManager();
+                CreateTweetFragment fragment = CreateTweetFragment.newInstance(mAuthenticatedUser, tweet.getBody(), tweet.getUid());
+                fragment.show(fm, "create_tweet_fragment");
             }
         });
 
@@ -138,6 +156,9 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
 
         @BindView(R.id.ivLike)
         ImageView ivLike;
+
+        @BindView(R.id.tvFavoritesCount)
+        TextView tvFavoritesCount;
 
         public ViewHolder (View itemView) {
             super(itemView);
