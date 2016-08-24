@@ -94,7 +94,7 @@ public class Tweet {
             tweet.createdAt = jsonObject.getString("created_at");
             tweet.retweeted = jsonObject.getBoolean("retweeted");
             tweet.retweetCount = jsonObject.getInt("retweet_count");
-            tweet.favoritesCount = jsonObject.getInt("favourites_count");
+            //tweet.favoritesCount = jsonObject.getInt("favourites_count");
             JSONObject entities = jsonObject.getJSONObject("entities");
             if (entities.has("media")) {
                 JSONArray mediaArray = entities.getJSONArray("media");

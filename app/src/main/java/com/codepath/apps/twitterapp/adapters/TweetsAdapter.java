@@ -83,6 +83,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
+        holder.ivTweetImage.setImageDrawable(null);
         final Tweet tweet = mTweets.get(position);
         holder.tvUserHandle.setText(tweet.getUser().getScreenName().toString());
         holder.tvUserName.setText(tweet.getUser().getName().toString());
@@ -93,6 +94,10 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
 
         if (tweet.isRetweeted()) {
             holder.ivRetweet.setBackgroundResource(R.drawable.retweeted);
+        }
+
+        if (tweet.getImageUrl() != null) {
+            Glide.with(getContext()).load(tweet.getImageUrl()).into(holder.ivTweetImage);
         }
 
         holder.ivRetweet.setOnClickListener(new View.OnClickListener() {
@@ -170,6 +175,9 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
 
         @BindView(R.id.tvFavoritesCount)
         TextView tvFavoritesCount;
+
+        @BindView(R.id.ivTweetImage)
+        ImageView ivTweetImage;
 
         public ViewHolder (View itemView) {
             super(itemView);
