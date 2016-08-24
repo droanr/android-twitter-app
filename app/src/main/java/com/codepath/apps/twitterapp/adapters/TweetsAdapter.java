@@ -53,10 +53,22 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
 
     public User getmAuthenticatedUser() { return mAuthenticatedUser; }
 
-    public TweetsAdapter(Context context, ArrayList<Tweet> tweets, User authenticatedUser) {
+    public TweetsAdapter(Context context, ArrayList<Tweet> tweets) {
         mContext = context;
         mTweets = tweets;
-        mAuthenticatedUser = authenticatedUser;
+        TwitterClient client = TwitterApplication.getRestClient();
+        client.getAuthenticatedUser(new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                Log.d("DEBUG", response.toString());
+                mAuthenticatedUser = User.fromJSON(response);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                Log.d("DEBUG", errorResponse.toString());
+            }
+        });
     }
 
     @Override
@@ -72,7 +84,6 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         final Tweet tweet = mTweets.get(position);
-
         holder.tvUserHandle.setText(tweet.getUser().getScreenName().toString());
         holder.tvUserName.setText(tweet.getUser().getName().toString());
         holder.tvTweet.setText(tweet.getBody().toString());
@@ -116,7 +127,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             @Override
             public void onClick(View view) {
                 FragmentManager fm = ((AppCompatActivity)getContext()).getSupportFragmentManager();
-                CreateTweetFragment fragment = CreateTweetFragment.newInstance(mAuthenticatedUser, tweet.getBody(), tweet.getUid());
+                CreateTweetFragment fragment = CreateTweetFragment.newInstance(getmAuthenticatedUser(), tweet.getBody(), tweet.getUid());
                 fragment.show(fm, "create_tweet_fragment");
             }
         });

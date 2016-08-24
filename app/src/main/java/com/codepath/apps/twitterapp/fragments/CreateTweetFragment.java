@@ -101,11 +101,9 @@ public class CreateTweetFragment extends DialogFragment {
             etTweet.setText(body);
             etTweet.setSelection(body.length());
         }
-        if (user != null) {
-            tvUserName.setText(user.getName());
-            tvUserHandle.setText(authenticatedUser.getScreenName());
-            Glide.with(this).load(authenticatedUser.getProfileImageUrl()).into(ivUserImage);
-        }
+        tvUserName.setText(user.getName());
+        tvUserHandle.setText(authenticatedUser.getScreenName());
+        Glide.with(this).load(authenticatedUser.getProfileImageUrl()).into(ivUserImage);
     }
 
     private void setUpViews() {
@@ -129,10 +127,12 @@ public class CreateTweetFragment extends DialogFragment {
                 if (tweet.length() > 0) {
                     if (inReplyToId != -1) {
                         CreateTweetFragmentListener listener = (CreateTweetFragmentListener) getActivity();
-                        listener.onCreateNewTweet(tweet);
+                        listener.onReplyToTweet(tweet, inReplyToId);
                         close();
                     } else {
-
+                        CreateTweetFragmentListener listener = (CreateTweetFragmentListener) getActivity();
+                        listener.onCreateNewTweet(tweet);
+                        close();
                     }
                 }
             }

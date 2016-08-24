@@ -87,7 +87,7 @@ public class TimelineActivity extends AppCompatActivity implements CreateTweetFr
 
     public void setupViews() {
         tweets = new ArrayList<>();
-        adapter = new TweetsAdapter(this, tweets, getAuthenticatedUser());
+        adapter = new TweetsAdapter(this, tweets);
         rvTweets.setAdapter(adapter);
         rvTweets.setItemAnimator(new SlideInUpAnimator());
         rvTweets.setLayoutManager(new LinearLayoutManager(this));
