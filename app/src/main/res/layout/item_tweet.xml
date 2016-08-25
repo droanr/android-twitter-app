@@ -72,13 +72,13 @@
             android:layout_alignParentBottom="true"
             android:layout_toRightOf="@+id/ivUserImage"
             android:layout_toEndOf="@+id/ivUserImage"
-            android:layout_marginLeft="80dp"/>
+            android:layout_marginLeft="100dp"/>
         <ImageView
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:id="@+id/ivRetweet"
             android:background="@drawable/retweet"
-            android:layout_marginLeft="80dp"/>
+            android:layout_marginLeft="100dp"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -96,15 +96,7 @@
         android:layout_alignParentBottom="true"
         android:layout_toLeftOf="@+id/tvTime"
         android:layout_toStartOf="@+id/tvTime"
-        android:layout_marginLeft="80dp"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="10dp"
-            android:paddingTop="3dp"
-            tools:text="Small Text"
-            android:id="@+id/tvFavoritesCount" />
+        android:layout_marginLeft="70dp"/>
 
     </LinearLayout>
 

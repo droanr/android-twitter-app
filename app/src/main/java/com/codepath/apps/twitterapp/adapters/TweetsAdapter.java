@@ -84,13 +84,14 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         holder.ivTweetImage.setImageDrawable(null);
+        holder.ivRetweet.setImageDrawable(null);
+        holder.ivLike.setImageDrawable(null);
         final Tweet tweet = mTweets.get(position);
         holder.tvUserHandle.setText(tweet.getUser().getScreenName().toString());
         holder.tvUserName.setText(tweet.getUser().getName().toString());
         holder.tvTweet.setText(tweet.getBody().toString());
         holder.tvTime.setText(getRelativeTimeAgo(tweet.getCreatedAt()));
         holder.tvRetweetCount.setText(String.valueOf(tweet.getRetweetCount()));
-        holder.tvFavoritesCount.setText(String.valueOf(tweet.getFavoritesCount()));
 
         if (tweet.isRetweeted()) {
             holder.ivRetweet.setBackgroundResource(R.drawable.retweeted);
@@ -99,6 +100,36 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         if (tweet.getImageUrl() != null) {
             Glide.with(getContext()).load(tweet.getImageUrl()).into(holder.ivTweetImage);
         }
+
+        if (tweet.isFavorited()) {
+            holder.ivLike.setBackgroundResource(R.drawable.liked);
+        }
+
+        holder.ivLike.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                TwitterClient client = TwitterApplication.getRestClient();
+                client.postFavorite(tweet.getUid(), new JsonHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                        Log.d("DEBUG", response.toString());
+                        holder.ivLike.setBackgroundResource(R.drawable.liked);
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                        Log.d("DEBUG", errorResponse.toString());
+                        try {
+                            if (errorResponse.getJSONArray("errors").getJSONObject(0).getInt("code") == 139) {
+                                Toast.makeText(getContext(), "You have already favorited this tweet", Toast.LENGTH_LONG).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+            }
+        });
 
         holder.ivRetweet.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -172,9 +203,6 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
 
         @BindView(R.id.ivLike)
         ImageView ivLike;
-
-        @BindView(R.id.tvFavoritesCount)
-        TextView tvFavoritesCount;
 
         @BindView(R.id.ivTweetImage)
         ImageView ivTweetImage;
