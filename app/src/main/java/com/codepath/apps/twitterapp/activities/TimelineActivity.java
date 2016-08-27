@@ -2,10 +2,7 @@ package com.codepath.apps.twitterapp.activities;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -13,42 +10,24 @@ import android.view.MenuItem;
 
 import com.codepath.apps.twitterapp.R;
 import com.codepath.apps.twitterapp.TwitterApplication;
-import com.codepath.apps.twitterapp.adapters.TweetsAdapter;
 import com.codepath.apps.twitterapp.fragments.CreateTweetFragment;
+import com.codepath.apps.twitterapp.fragments.TweetsListFragment;
 import com.codepath.apps.twitterapp.models.Tweet;
 import com.codepath.apps.twitterapp.models.User;
-import com.codepath.apps.twitterapp.utils.EndlessRecyclerViewScrollListener;
 import com.codepath.apps.twitterapp.utils.TwitterClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-
-import butterknife.BindView;
 import butterknife.ButterKnife;
 import cz.msebera.android.httpclient.Header;
-import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
 
 public class TimelineActivity extends AppCompatActivity implements CreateTweetFragment.CreateTweetFragmentListener {
 
     TwitterClient client;
-    ArrayList<Tweet> tweets;
-
-    @BindView(R.id.rvTweets)
-    RecyclerView rvTweets;
-
-    @BindView(R.id.swipeContainer)
-    SwipeRefreshLayout swipeContainer;
-
-    TweetsAdapter adapter;
-
-    public User getAuthenticatedUser() {
-        return authenticatedUser;
-    }
-
     User authenticatedUser;
+    TweetsListFragment fragmentTweetsList;
 
     private static final long DEFAULT_MAX = -1;
 
@@ -64,8 +43,12 @@ public class TimelineActivity extends AppCompatActivity implements CreateTweetFr
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setCurrentUser();
-        setupViews();
-        populateTimeline(DEFAULT_MAX);
+        //populateTimeline(DEFAULT_MAX);
+
+        if (savedInstanceState == null) {
+            fragmentTweetsList = (TweetsListFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_timeline);
+        }
+
     }
 
     public void setCurrentUser() {
@@ -84,7 +67,7 @@ public class TimelineActivity extends AppCompatActivity implements CreateTweetFr
             }
         });
     }
-
+/*
     public void setupViews() {
         tweets = new ArrayList<>();
         adapter = new TweetsAdapter(this, tweets);
@@ -109,7 +92,7 @@ public class TimelineActivity extends AppCompatActivity implements CreateTweetFr
             }
         });
     }
-
+*/
     // Send an API request to get the timeline json
     // fill the RecyclerView by creating the tweet objects from the json
     public void populateTimeline(long maxId) {
@@ -119,8 +102,7 @@ public class TimelineActivity extends AppCompatActivity implements CreateTweetFr
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 // Deserialize + create models.
                 // Add them to the adapter
-                tweets.addAll(Tweet.fromJSONArray(response));
-                adapter.notifyDataSetChanged();
+                fragmentTweetsList.addAll(Tweet.fromJSONArray(response));
             }
 
 
@@ -152,8 +134,7 @@ public class TimelineActivity extends AppCompatActivity implements CreateTweetFr
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 Log.d("DEBUG", response.toString());
-                tweets.add(0, Tweet.fromJSON(response));
-                adapter.notifyDataSetChanged();
+                fragmentTweetsList.add(0, Tweet.fromJSON(response));
             }
 
             @Override
@@ -169,8 +150,7 @@ public class TimelineActivity extends AppCompatActivity implements CreateTweetFr
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 Log.d("DEBUG", response.toString());
-                tweets.add(0, Tweet.fromJSON(response));
-                adapter.notifyDataSetChanged();
+                fragmentTweetsList.add(0, Tweet.fromJSON(response));
             }
 
             @Override
