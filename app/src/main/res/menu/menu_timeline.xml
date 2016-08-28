@@ -7,4 +7,12 @@
         android:icon="@drawable/create_tweet"
         app:showAsAction="ifRoom"
         android:title="CreateTweet" />
+
+    <item
+        android:id="@+id/miProfile"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_profile"
+        android:onClick="onProfileView"
+        android:title="ViewProfile"/>
+
 </menu>

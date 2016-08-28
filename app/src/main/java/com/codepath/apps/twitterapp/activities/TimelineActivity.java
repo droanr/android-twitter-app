@@ -1,16 +1,22 @@
 package com.codepath.apps.twitterapp.activities;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.astuetz.PagerSlidingTabStrip;
 import com.codepath.apps.twitterapp.R;
 import com.codepath.apps.twitterapp.TwitterApplication;
 import com.codepath.apps.twitterapp.fragments.CreateTweetFragment;
+import com.codepath.apps.twitterapp.fragments.HomeTimelineFragment;
+import com.codepath.apps.twitterapp.fragments.MentionsTimelineFragment;
 import com.codepath.apps.twitterapp.fragments.TweetsListFragment;
 import com.codepath.apps.twitterapp.models.Tweet;
 import com.codepath.apps.twitterapp.models.User;
@@ -20,6 +26,7 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import cz.msebera.android.httpclient.Header;
 
@@ -28,6 +35,12 @@ public class TimelineActivity extends AppCompatActivity implements CreateTweetFr
     TwitterClient client;
     User authenticatedUser;
     TweetsListFragment fragmentTweetsList;
+
+    @BindView(R.id.viewpager)
+    ViewPager vpPager;
+
+    @BindView(R.id.tabs)
+    PagerSlidingTabStrip tabStrip;
 
     private static final long DEFAULT_MAX = -1;
 
@@ -43,11 +56,12 @@ public class TimelineActivity extends AppCompatActivity implements CreateTweetFr
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setCurrentUser();
-        //populateTimeline(DEFAULT_MAX);
 
-        if (savedInstanceState == null) {
-            fragmentTweetsList = (TweetsListFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_timeline);
-        }
+        vpPager.setAdapter(new TweetsPagerAdapter(getSupportFragmentManager()));
+        tabStrip.setViewPager(vpPager);
+        //if (savedInstanceState == null) {
+            //fragmentTweetsList = (TweetsListFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_timeline);
+        //}
 
     }
 
@@ -158,5 +172,40 @@ public class TimelineActivity extends AppCompatActivity implements CreateTweetFr
                 Log.d("DEBUG", errorResponse.toString());
             }
         });
+    }
+
+    public void onProfileView(MenuItem item) {
+        // Launch the profile view
+
+    }
+
+    // Return the order of fragments in the view pager
+    public class TweetsPagerAdapter extends FragmentPagerAdapter {
+
+        private String tabTitles[] = {"Home", "Mentions"};
+
+        public TweetsPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            if (position == 0) {
+                return new HomeTimelineFragment();
+            } else if (position == 1) {
+                return new MentionsTimelineFragment();
+            }
+            return null;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return tabTitles[position];
+        }
+
+        @Override
+        public int getCount() {
+            return tabTitles.length;
+        }
     }
 }
