@@ -1,5 +1,6 @@
 package com.codepath.apps.twitterapp.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -25,6 +26,7 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.parceler.Parcels;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -176,7 +178,9 @@ public class TimelineActivity extends AppCompatActivity implements CreateTweetFr
 
     public void onProfileView(MenuItem item) {
         // Launch the profile view
-
+        Intent i = new Intent(this, ProfileActivity.class);
+        i.putExtra("user", Parcels.wrap(authenticatedUser));
+        startActivity(i);
     }
 
     // Return the order of fragments in the view pager

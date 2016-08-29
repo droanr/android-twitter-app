@@ -6,4 +6,6 @@
     <string name="action_settings">Settings</string>
     <string name="new_tweet_hint">What\'s happening?</string>
     <string name="label_tweet">Tweet</string>
+    <string name="following_label">Following</string>
+    <string name="followers_label">Followers</string>
 </resources>
