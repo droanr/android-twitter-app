@@ -34,7 +34,8 @@ The following advanced user stories are optional:
 The following ADDITIONAL features are implemented:
 - [x] Add ability to retweet, and show retweet count in timeline view.
 
-GIF (Week 4):
+GIF (Week 4 Features):
+![alt tag](https://raw.githubusercontent.com/droanr/android-twitter-app/master/twitter-app-final-2.gif)
 
 GIF:
 ![alt tag](https://raw.githubusercontent.com/droanr/android-twitter-app/master/twitter-app-final.gif)
