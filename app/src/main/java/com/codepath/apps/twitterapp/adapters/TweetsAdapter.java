@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.codepath.apps.twitterapp.R;
 import com.codepath.apps.twitterapp.TwitterApplication;
+import com.codepath.apps.twitterapp.activities.ProfileActivity;
 import com.codepath.apps.twitterapp.activities.TweetDetailActivity;
 import com.codepath.apps.twitterapp.fragments.CreateTweetFragment;
 import com.codepath.apps.twitterapp.models.Tweet;
@@ -142,6 +143,9 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
                         Tweet t = Tweet.fromJSON(response);
                         mTweets.add(0, t);
                         notifyDataSetChanged();
+                        Glide.with(getContext()).load(R.drawable.retweeted).into(holder.ivRetweet);
+                        int retweetCount = Integer.parseInt(holder.tvRetweetCount.getText().toString());
+                        holder.tvRetweetCount.setText(Integer.toString(retweetCount+1));
                     }
 
                     @Override
@@ -165,6 +169,15 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
                 FragmentManager fm = ((AppCompatActivity)getContext()).getSupportFragmentManager();
                 CreateTweetFragment fragment = CreateTweetFragment.newInstance(getmAuthenticatedUser(), tweet.getBody(), tweet.getUid());
                 fragment.show(fm, "create_tweet_fragment");
+            }
+        });
+
+        holder.ivUserImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getContext(), ProfileActivity.class);
+                i.putExtra("user", Parcels.wrap(tweet.getUser()));
+                getContext().startActivity(i);
             }
         });
 

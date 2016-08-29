@@ -7,8 +7,9 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="200dp"
         android:padding="16dp"
+        android:layout_marginTop="50dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
@@ -50,9 +51,8 @@
             android:text="Medium Text"
             android:id="@+id/tvUserDescription"
             android:layout_below="@+id/ivUserImage"
-            android:layout_alignLeft="@+id/ivUserImage"
-            android:layout_alignStart="@+id/ivUserImage"
-            android:layout_marginTop="20dp" />
+            android:layout_alignLeft="@+id/tvUserHandle"
+            android:layout_alignStart="@+id/tvUserHandle" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -60,9 +60,9 @@
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="@string/following_label"
             android:id="@+id/tvFollowing"
-            android:layout_alignParentBottom="true"
-            android:layout_alignLeft="@+id/tvUserHandle"
-            android:layout_alignStart="@+id/tvUserHandle" />
+            android:layout_alignTop="@+id/tvFollowersCount"
+            android:layout_toRightOf="@+id/tvFollowersCount"
+            android:layout_toEndOf="@+id/tvFollowersCount" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -78,13 +78,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:layout_marginRight="5dp"
             tools:text="123"
             android:id="@+id/tvFollowersCount"
+            android:layout_marginRight="5dp"
             android:textStyle="bold"
-            android:layout_alignTop="@+id/tvFollowing"
-            android:layout_toLeftOf="@+id/tvFollowing"
-            android:layout_toStartOf="@+id/tvFollowing" />
+            android:layout_below="@+id/tvUserDescription"
+            android:layout_alignRight="@+id/ivUserImage"
+            android:layout_alignEnd="@+id/ivUserImage"
+            android:layout_marginTop="22dp" />
 
         <TextView
             tools:text="123"
@@ -94,9 +95,8 @@
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:id="@+id/tvFollowingCount"
             android:textStyle="bold"
-            android:layout_alignTop="@+id/tvFollowers"
-            android:layout_toRightOf="@+id/tvUserHandle"
-            android:layout_toEndOf="@+id/tvUserHandle" />
+            android:layout_alignTop="@+id/tvFollowing"
+            android:layout_centerHorizontal="true" />
 
 
     </RelativeLayout>
