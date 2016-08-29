@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -21,6 +20,7 @@ import com.codepath.apps.twitterapp.fragments.MentionsTimelineFragment;
 import com.codepath.apps.twitterapp.fragments.TweetsListFragment;
 import com.codepath.apps.twitterapp.models.Tweet;
 import com.codepath.apps.twitterapp.models.User;
+import com.codepath.apps.twitterapp.utils.SmartFragmentStatePagerAdapter;
 import com.codepath.apps.twitterapp.utils.TwitterClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -44,6 +44,8 @@ public class TimelineActivity extends AppCompatActivity implements CreateTweetFr
     @BindView(R.id.tabs)
     PagerSlidingTabStrip tabStrip;
 
+    TweetsPagerAdapter adapter;
+
     private static final long DEFAULT_MAX = -1;
 
     @Override
@@ -58,12 +60,12 @@ public class TimelineActivity extends AppCompatActivity implements CreateTweetFr
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setCurrentUser();
-
-        vpPager.setAdapter(new TweetsPagerAdapter(getSupportFragmentManager()));
+        adapter = new TweetsPagerAdapter(getSupportFragmentManager());
+        vpPager.setAdapter(adapter);
         tabStrip.setViewPager(vpPager);
-        //if (savedInstanceState == null) {
-            //fragmentTweetsList = (TweetsListFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_timeline);
-        //}
+        if (savedInstanceState == null) {
+            fragmentTweetsList = (HomeTimelineFragment) adapter.getRegisteredFragment(0);
+        }
 
     }
 
@@ -184,7 +186,7 @@ public class TimelineActivity extends AppCompatActivity implements CreateTweetFr
     }
 
     // Return the order of fragments in the view pager
-    public class TweetsPagerAdapter extends FragmentPagerAdapter {
+    public class TweetsPagerAdapter extends SmartFragmentStatePagerAdapter {
 
         private String tabTitles[] = {"Home", "Mentions"};
 
